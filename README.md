@@ -60,7 +60,7 @@ WITH RatingCounts AS (
         type,
         rating,
         COUNT(*) AS rating_count
-    FROM netflix
+    FROM Prime_Video
     GROUP BY type, rating
 ),
 RankedRatings AS (
