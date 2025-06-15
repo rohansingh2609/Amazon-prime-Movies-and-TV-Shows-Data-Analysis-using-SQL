@@ -15,7 +15,6 @@ This project involves a comprehensive analysis of Amazon Prime Videos movies and
 
 The data for this project is sourced from the Kaggle dataset:
 
-- **Dataset Link:** [Movies Dataset](https://www.kaggle.com/datasets/shivamb/amazon-prime-movies-and-tv-shows)
 
 ## Schema
 
