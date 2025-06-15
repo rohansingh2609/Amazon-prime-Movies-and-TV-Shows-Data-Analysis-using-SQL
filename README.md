@@ -2,7 +2,7 @@
   ![Prime video](https://github.com/rohansingh2609/Amazon-prime-Movies-and-TV-Shows-Data-Analysis-using-SQL/blob/main/logo.png)
 
 ## Overview
-This project involves a comprehensive analysis of Netflix's movies and TV shows data using SQL. The goal is to extract valuable insights and answer various business questions based on the dataset. The following README provides a detailed account of the project's objectives, business problems, solutions, findings, and conclusions.
+This project involves a comprehensive analysis of Amazon Prime Videos movies and TV shows data using SQL. The goal is to extract valuable insights and answer various business questions based on the dataset. The following README provides a detailed account of the project's objectives, business problems, solutions, findings, and conclusions.
 
 ## Objectives
 
@@ -15,13 +15,13 @@ This project involves a comprehensive analysis of Netflix's movies and TV shows 
 
 The data for this project is sourced from the Kaggle dataset:
 
-- **Dataset Link:** [Movies Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
+- **Dataset Link:** [Movies Dataset](https://www.kaggle.com/datasets/shivamb/amazon-prime-movies-and-tv-shows)
 
 ## Schema
 
 ```sql
-DROP TABLE IF EXISTS netflix;
-CREATE TABLE netflix
+DROP TABLE IF EXISTS Prime_Video;
+CREATE TABLE Prime_Video
 (
     show_id      VARCHAR(5),
     type         VARCHAR(10),
@@ -46,11 +46,11 @@ CREATE TABLE netflix
 SELECT 
     type,
     COUNT(*)
-FROM netflix
+FROM Prime_Video
 GROUP BY 1;
 ```
 
-**Objective:** Determine the distribution of content types on Netflix.
+**Objective:** Determine the distribution of content types on Prime Video.
 
 ### 2. Find the Most Common Rating for Movies and TV Shows
 
@@ -84,13 +84,13 @@ WHERE rank = 1;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Prime_Video
 WHERE release_year = 2020;
 ```
 
 **Objective:** Retrieve all movies released in a specific year.
 
-### 4. Find the Top 5 Countries with the Most Content on Netflix
+### 4. Find the Top 5 Countries with the Most Content on Prime Video
 
 ```sql
 SELECT * 
@@ -99,7 +99,7 @@ FROM
     SELECT 
         UNNEST(STRING_TO_ARRAY(country, ',')) AS country,
         COUNT(*) AS total_content
-    FROM netflix
+    FROM Prime_Video
     GROUP BY 1
 ) AS t1
 WHERE country IS NOT NULL
@@ -114,7 +114,7 @@ LIMIT 5;
 ```sql
 SELECT 
     *
-FROM netflix
+FROM Prime_Video
 WHERE type = 'Movie'
 ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
 ```
@@ -125,11 +125,11 @@ ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
 
 ```sql
 SELECT *
-FROM netflix
+FROM Prime_Video
 WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
 ```
 
-**Objective:** Retrieve content added to Netflix in the last 5 years.
+**Objective:** Retrieve content added to Prime Video in the last 5 years.
 
 ### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
 
@@ -139,7 +139,7 @@ FROM (
     SELECT 
         *,
         UNNEST(STRING_TO_ARRAY(director, ',')) AS director_name
-    FROM netflix
+    FROM Prime_Video
 ) AS t
 WHERE director_name = 'Rajiv Chilaka';
 ```
@@ -150,7 +150,7 @@ WHERE director_name = 'Rajiv Chilaka';
 
 ```sql
 SELECT *
-FROM netflix
+FROM Prime_Video
 WHERE type = 'TV Show'
   AND SPLIT_PART(duration, ' ', 1)::INT > 5;
 ```
@@ -163,13 +163,13 @@ WHERE type = 'TV Show'
 SELECT 
     UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
     COUNT(*) AS total_content
-FROM netflix
+FROM Prime_Video
 GROUP BY 1;
 ```
 
 **Objective:** Count the number of content items in each genre.
 
-### 10.Find each year and the average numbers of content release in India on netflix. 
+### 10.Find each year and the average numbers of content release in India on Prime Video. 
 return top 5 year with highest avg content release!
 
 ```sql
@@ -179,9 +179,9 @@ SELECT
     COUNT(show_id) AS total_release,
     ROUND(
         COUNT(show_id)::numeric /
-        (SELECT COUNT(show_id) FROM netflix WHERE country = 'India')::numeric * 100, 2
+        (SELECT COUNT(show_id) FROM Prime_Video WHERE country = 'India')::numeric * 100, 2
     ) AS avg_release
-FROM netflix
+FROM Prime_Video
 WHERE country = 'India'
 GROUP BY country, release_year
 ORDER BY avg_release DESC
@@ -194,7 +194,7 @@ LIMIT 5;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Prime_Video
 WHERE listed_in LIKE '%Documentaries';
 ```
 
@@ -204,7 +204,7 @@ WHERE listed_in LIKE '%Documentaries';
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Prime_Video
 WHERE director IS NULL;
 ```
 
@@ -214,7 +214,7 @@ WHERE director IS NULL;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Prime_Video
 WHERE casts LIKE '%Salman Khan%'
   AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
 ```
@@ -227,7 +227,7 @@ WHERE casts LIKE '%Salman Khan%'
 SELECT 
     UNNEST(STRING_TO_ARRAY(casts, ',')) AS actor,
     COUNT(*)
-FROM netflix
+FROM Prime_Video
 WHERE country = 'India'
 GROUP BY actor
 ORDER BY COUNT(*) DESC
@@ -248,7 +248,7 @@ FROM (
             WHEN description ILIKE '%kill%' OR description ILIKE '%violence%' THEN 'Bad'
             ELSE 'Good'
         END AS category
-    FROM netflix
+    FROM Prime_Video
 ) AS categorized_content
 GROUP BY category;
 ```
@@ -260,7 +260,7 @@ GROUP BY category;
 - **Content Distribution:** The dataset contains a diverse range of movies and TV shows with varying ratings and genres.
 - **Common Ratings:** Insights into the most common ratings provide an understanding of the content's target audience.
 - **Geographical Insights:** The top countries and the average content releases by India highlight regional content distribution.
-- **Content Categorization:** Categorizing content based on specific keywords helps in understanding the nature of content available on Netflix.
+- **Content Categorization:** Categorizing content based on specific keywords helps in understanding the nature of content available on Prime Video.
 
-This analysis provides a comprehensive view of Netflix's content and can help inform content strategy and decision-making.
+This analysis provides a comprehensive view of Prime Video content and can help inform content strategy and decision-making.
 
